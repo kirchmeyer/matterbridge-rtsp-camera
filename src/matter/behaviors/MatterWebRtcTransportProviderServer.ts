@@ -22,7 +22,6 @@ import {
     parseSdpIceCandidates,
     prepareHubOfferForGo2rtc,
 } from '../webrtcIce.js';
-import { appConfig } from '../../config/app.js';
 import { buildSolicitOfferResponse } from './solicitOfferHandler.js';
 import { logHubEndpointAdoption } from '../hubAdoptionLog.js';
 
@@ -119,9 +118,7 @@ export class MatterWebRtcTransportProviderServer extends CameraRequirements.WebR
         );
 
         const compactHub = isCompactHubOffer(request.sdp);
-        const matterHost = appConfig.matterHost || undefined;
-        const lanPrefix = matterHost ? matterHost.split('.').slice(0, 3).join('.') + '.' : undefined;
-        const hubOffer = prepareHubOfferForGo2rtc(request.sdp, { lanPrefix });
+        const hubOffer = prepareHubOfferForGo2rtc(request.sdp);
         const hubCandidatesBefore = parseSdpIceCandidates(request.sdp).length;
         const hubCandidatesAfter = parseSdpIceCandidates(hubOffer).length;
         if (compactHub) {
@@ -189,9 +186,9 @@ export class MatterWebRtcTransportProviderServer extends CameraRequirements.WebR
             }
         }
 
-        const filteredAnswer = filterSdpToLocalBridgeCandidate(exchange.answerSdp, { host: matterHost });
+        const filteredAnswer = filterSdpToLocalBridgeCandidate(exchange.answerSdp);
         const allLocal = parseSdpIceCandidates(filteredAnswer);
-        const localCandidates = filterLocalBridgeCandidates(allLocal, { host: matterHost });
+        const localCandidates = filterLocalBridgeCandidates(allLocal);
         const answerSdp = embedLocalCandidatesInAnswerSdp(filteredAnswer, localCandidates);
 
         this.#sessions.set(sessionId, {
@@ -256,7 +253,7 @@ export class MatterWebRtcTransportProviderServer extends CameraRequirements.WebR
             if (allLocalCount !== localCandidates.length) {
                 logger.info(
                     `Filtered bridge ICE candidates session=${sessionId} `
-                    + `${allLocalCount}→${localCandidates.length} host=${appConfig.matterHost || 'auto'}`,
+                    + `${allLocalCount}→${localCandidates.length} host=auto`,
                 );
             }
             if (localCandidates.length > 0) {

@@ -28,7 +28,7 @@ Controller support for Matter cameras is still limited. Apple Home does not curr
 
 ## Installation
 
-After the package is published to npm:
+To install the published package from npm:
 
 ```bash
 npm install --global matterbridge-rtsp-camera
@@ -97,7 +97,7 @@ The internal HomeKit UUID, MAC, and persistence namespace intentionally remain `
 - No recording, talkback, PTZ, motion sensor, or camera discovery UI is included.
 - Matter mode depends on controller support for the Matter 1.5 Camera device type.
 - RTSP transport and codec compatibility depend on the camera, go2rtc, and FFmpeg.
-- The included default camera is a public test stream and should be replaced.
+- The included camera URL is a placeholder and must be replaced.
 
 ## Development
 

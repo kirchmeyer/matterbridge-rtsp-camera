@@ -10,7 +10,7 @@
     {
       "id": "test-camera",
       "name": "Test Camera",
-      "rtspUrl": "rtsp://3d.nrvous.io:8554/camera?video=all&audio=all"
+      "rtspUrl": "rtsp://camera-host:8554/stream"
     }
   ]
 }

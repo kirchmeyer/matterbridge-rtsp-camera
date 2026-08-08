@@ -13,7 +13,6 @@ import { MatterCameraAvStreamManagementServer } from './matter/behaviors/MatterC
 import { MatterWebRtcTransportProviderServer } from './matter/behaviors/MatterWebRtcTransportProviderServer.js';
 import { streamContext } from './matter/behaviors/streamContext.js';
 import { cameraAvStreamDefaults } from './matter/devices/cameraAvStreamDefaults.js';
-import { appConfig } from './config/app.js';
 import { HomeKitCameraPublisher, homeKitStoragePath } from './HomeKitCameraPublisher.js';
 
 export type CameraProtocol = 'matter' | 'homekit';
@@ -75,13 +74,18 @@ export class MatterbridgeCameraPlatform extends MatterbridgeDynamicPlatform {
     this.log.info(`Starting ${this.config.name}: ${reason ?? 'startup'}`);
 
     const cameras = (this.config.cameras ?? []).map(cameraConfig => this.validateCameraConfig(cameraConfig));
+    const cameraIds = new Set<string>();
+    for (const camera of cameras) {
+      if (cameraIds.has(camera.id)) {
+        throw new Error(`Camera id ${camera.id} is configured more than once`);
+      }
+      cameraIds.add(camera.id);
+    }
     if (this.mode === 'homekit') {
       await this.homekit!.start(cameras);
       return;
     }
 
-    appConfig.matterHost = '';
-    appConfig.go2rtcUrl = this.config.go2rtcUrl!;
     await this.go2rtc!.waitUntilReady(10, 1_000);
 
     for (const cameraConfig of cameras) {
@@ -122,10 +126,6 @@ export class MatterbridgeCameraPlatform extends MatterbridgeDynamicPlatform {
     endpoint.behaviors.inject(MatterWebRtcTransportProviderServer);
     endpoint.behaviors.inject(CameraRequirements.WebRtcTransportRequestorClient);
     return endpoint;
-  }
-
-  override async onConfigure(): Promise<void> {
-    await super.onConfigure();
   }
 
   override async onShutdown(reason?: string): Promise<void> {
