@@ -81,6 +81,12 @@ Set `mode` to `homekit` and choose an eight-digit `homekitPin` in `XXX-XX-XXX` f
 
 Use a unique PIN and protect the configuration file because RTSP URLs commonly contain credentials.
 
+### Video resolution
+
+HomeKit chooses the live-stream resolution from the profiles advertised by the plugin, ranging from 320x180 to 1920x1080 at up to 30 FPS. A log such as `640x360@30` reports the output requested by Apple Home, not the RTSP source resolution; Apple Home may choose a lower profile for camera tiles, remote viewing, or constrained bandwidth.
+
+Matter advertises a 640x360 minimum viewport and a 1920x1080 sensor at up to 30 FPS. The Matter controller negotiates the live stream within those capabilities. Matter snapshots are handled separately and are capped at 640 pixels wide so the JPEG remains below Matter's transport frame limit.
+
 ## Migration from `matterbridge-camera`
 
 Version 0.3.1 was developed under the temporary package name `matterbridge-camera`, which belongs to another npm publisher. To migrate:
