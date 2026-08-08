@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "required": ["mode", "cameras"],
+  "properties": {
+    "mode": {
+      "title": "Camera protocol",
+      "type": "string",
+      "enum": ["matter", "homekit"],
+      "enumNames": ["Matter (Matter 1.5)", "Apple Home (HomeKit)"],
+      "default": "matter"
+    },
+    "go2rtcUrl": {
+      "title": "go2rtc API URL (Matter mode only)",
+      "type": "string",
+      "default": "http://127.0.0.1:1984"
+    },
+    "homekitPin": {
+      "title": "Apple Home pairing code (HomeKit mode only)",
+      "type": "string",
+      "pattern": "^[0-9]{3}-[0-9]{2}-[0-9]{3}$",
+      "default": "031-45-154"
+    },
+    "cameras": {
+      "title": "Cameras",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "rtspUrl"],
+        "properties": {
+          "id": { "title": "Stable ID", "type": "string" },
+          "name": { "title": "Name", "type": "string" },
+          "rtspUrl": { "title": "RTSP URL", "type": "string" }
+        }
+      }
+    }
+  }
+}

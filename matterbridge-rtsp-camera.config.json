@@ -1,0 +1,16 @@
+{
+  "name": "matterbridge-rtsp-camera",
+  "type": "DynamicPlatform",
+  "debug": false,
+  "unregisterOnShutdown": false,
+  "mode": "matter",
+  "go2rtcUrl": "http://127.0.0.1:1984",
+  "homekitPin": "031-45-154",
+  "cameras": [
+    {
+      "id": "test-camera",
+      "name": "Test Camera",
+      "rtspUrl": "rtsp://3d.nrvous.io:8554/camera?video=all&audio=all"
+    }
+  ]
+}
