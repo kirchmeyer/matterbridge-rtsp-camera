@@ -30,7 +30,14 @@
         "properties": {
           "id": { "title": "Stable ID", "type": "string", "minLength": 1 },
           "name": { "title": "Name", "type": "string", "minLength": 1 },
-          "rtspUrl": { "title": "RTSP URL", "type": "string", "pattern": "^rtsps?://" }
+          "rtspUrl": { "title": "RTSP URL", "type": "string", "pattern": "^rtsps?://" },
+          "homekitPort": {
+            "title": "HomeKit port",
+            "description": "HomeKit mode only: the TCP port this camera listens on, 1024 to 65535, different for each camera. Leave empty for a free port picked at every start (pairing works either way: the port is advertised over mDNS); set it to keep the port across restarts, for a firewall rule between networks.",
+            "type": "integer",
+            "minimum": 1024,
+            "maximum": 65535
+          }
         }
       }
     }

@@ -1,6 +1,6 @@
 {
   "name": "matterbridge-rtsp-camera",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Matterbridge plugin for RTSP cameras using Matter or native HomeKit",
   "author": "Joel Kirchmeyer",
   "maintainers": [
@@ -35,7 +35,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "clean": "rm -rf dist",
-    "test": "npm install --no-save --package-lock=false matterbridge@3.10.4 && npm run build && node --import tsx src/streaming/Go2RTCClient.directSource.test.ts",
+    "test": "npm install --no-save --package-lock=false matterbridge@3.10.4 && npm run build && node --import tsx src/streaming/Go2RTCClient.directSource.test.ts && node --import tsx src/config/homekitPort.test.ts",
     "prepack": "npm test"
   },
   "engines": {

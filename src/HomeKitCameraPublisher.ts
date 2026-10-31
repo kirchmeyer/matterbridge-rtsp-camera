@@ -33,6 +33,7 @@ export interface HomeKitCameraConfig {
   id: string;
   name: string;
   rtspUrl: string;
+  homekitPort?: number;
 }
 
 interface HomeKitLogger {
@@ -337,6 +338,8 @@ export class HomeKitCameraPublisher {
         category: Categories.IP_CAMERA,
         setupID: identity.setupId,
         bind: '0.0.0.0',
+        // a fixed port when the camera has one (a firewall between networks can then be told it); else the library picks a free one at every start, as before
+        ...(config.homekitPort === undefined ? {} : { port: config.homekitPort }),
         advertiser: MDNSAdvertiser.CIAO,
       });
       this.cameras.push({ accessory, delegate });

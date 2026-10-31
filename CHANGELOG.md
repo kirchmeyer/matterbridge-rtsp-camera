@@ -4,6 +4,12 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-10-31
+
+### Added
+
+- `homekitPort` for a camera in HomeKit mode: the TCP port it listens on (1024 to 65535, different for each camera). Left out, the HomeKit library picks a free port at every start, as before; set, the port stays the same across restarts, so a firewall between networks can be told it. The library still opens a loopback-only port for each connection and UDP ports for a stream.
+
 ## [0.3.1] - 2026-08-08
 
 ### Changed

@@ -14,6 +14,7 @@ import { MatterWebRtcTransportProviderServer } from './matter/behaviors/MatterWe
 import { streamContext } from './matter/behaviors/streamContext.js';
 import { cameraAvStreamDefaults } from './matter/devices/cameraAvStreamDefaults.js';
 import { HomeKitCameraPublisher, homeKitStoragePath } from './HomeKitCameraPublisher.js';
+import { assertDistinctPorts, parseHomeKitPort } from './config/homekitPort.js';
 
 export type CameraProtocol = 'matter' | 'homekit';
 
@@ -21,6 +22,7 @@ export interface CameraConfig {
   id: string;
   name: string;
   rtspUrl: string;
+  homekitPort?: number;
 }
 
 export interface CameraPlatformConfig extends PlatformConfig {
@@ -81,6 +83,7 @@ export class MatterbridgeCameraPlatform extends MatterbridgeDynamicPlatform {
       }
       cameraIds.add(camera.id);
     }
+    assertDistinctPorts(cameras);
     if (this.mode === 'homekit') {
       await this.homekit!.start(cameras);
       return;
@@ -107,7 +110,8 @@ export class MatterbridgeCameraPlatform extends MatterbridgeDynamicPlatform {
     if (!rtspUrl.startsWith('rtsp://') && !rtspUrl.startsWith('rtsps://')) {
       throw new Error(`Camera ${id} has an unsupported stream URL`);
     }
-    return { id, name, rtspUrl };
+    const homekitPort = parseHomeKitPort(cameraConfig.homekitPort, id);
+    return homekitPort === undefined ? { id, name, rtspUrl } : { id, name, rtspUrl, homekitPort };
   }
 
   private createCameraEndpoint(cameraConfig: CameraConfig): MatterbridgeEndpoint {
