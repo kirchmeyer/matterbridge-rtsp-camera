@@ -81,6 +81,16 @@ Set `mode` to `homekit` and choose an eight-digit `homekitPin` in `XXX-XX-XXX` f
 
 Use a unique PIN and protect the configuration file because RTSP URLs commonly contain credentials.
 
+#### Fixed HomeKit ports
+
+Each HomeKit camera listens on one TCP port. By default the HomeKit library picks a free port at every start; pairing works either way, because the port is advertised over mDNS. To keep the port across restarts (for a firewall rule between networks, say), give the camera a `homekitPort` from 1024 to 65535, different for each camera:
+
+```json
+{ "id": "front-door", "name": "Front door", "rtspUrl": "rtsp://...", "homekitPort": 51827 }
+```
+
+Besides that port, the library opens a loopback-only port for each controller connection (never reachable from the network) and UDP ports for a live stream; those are chosen per session.
+
 ### Video resolution
 
 HomeKit chooses the live-stream resolution from the profiles advertised by the plugin, ranging from 320x180 to 1920x1080 at up to 30 FPS. A log such as `640x360@30` reports the output requested by Apple Home, not the RTSP source resolution; Apple Home may choose a lower profile for camera tiles, remote viewing, or constrained bandwidth.
